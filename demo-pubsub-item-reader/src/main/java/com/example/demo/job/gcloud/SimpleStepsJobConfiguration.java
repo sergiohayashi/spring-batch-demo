@@ -1,4 +1,4 @@
-package com.example.demo.job;
+package com.example.demo.job.gcloud;
 
 import java.util.Arrays;
 import java.util.List;

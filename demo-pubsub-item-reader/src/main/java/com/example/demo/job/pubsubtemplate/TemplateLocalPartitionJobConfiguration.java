@@ -1,4 +1,4 @@
-package com.example.demo.job;
+package com.example.demo.job.pubsubtemplate;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,10 +20,11 @@ import org.springframework.context.annotation.Configuration;
 import com.example.demo.commons.CommonStepBuilder;
 import com.example.demo.commons.CommonTaskExecutorBuilder;
 import com.example.demo.reader.PubSubItemReaderBuilder;
+import com.example.demo.reader.PubSubTemplateItemReader;
 
 @Configuration
 @EnableBatchProcessing		//para injetar JobBuilderFactory e StepBuilderFactory
-public class LocalPartitionJobConfiguration {
+public class TemplateLocalPartitionJobConfiguration {
 	
 	
     @Autowired
@@ -32,9 +33,12 @@ public class LocalPartitionJobConfiguration {
     @Autowired
     public StepBuilderFactory stepBuilderFactory;
 
+	@Autowired 
+	public PubSubTemplateItemReader pubsubTemplateItemReader;
+
     @Bean
-    public Job localPartitionJob() {
-    	return jobBuilderFactory.get( "pubsub-local-partition")
+    public Job templateLocalPartitionJob() {
+    	return jobBuilderFactory.get( "template-pubsub-local-partition")
     			.start( step1())
     			.build();
     }
@@ -69,20 +73,20 @@ public class LocalPartitionJobConfiguration {
 	private Step stepWorker() {
 		return this.stepBuilderFactory.get( "step-worker")
 			.<String,String>chunk(1)
-			.reader( pubsubItemReader(null))
+			.reader( pubsubTemplateItemReader(null))
 			.writer( CommonStepBuilder.writer())
 			.build();
 	}
 
 	@Bean
 	@StepScope
-	public ItemReader<String> pubsubItemReader(
+	public ItemReader<String> pubsubTemplateItemReader(
 		 @Value("#{stepExecutionContext['value']}") Integer value
 			
 		) {
 		System.out.println( String.format( "partition value= %d", value));
 		
-		return new PubSubItemReaderBuilder()
+		return pubsubTemplateItemReader
 				.projectId("playground--sergio")
 				.subscriptionId("mysub")
 				.build();
