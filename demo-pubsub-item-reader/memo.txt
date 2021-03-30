@@ -1,0 +1,11 @@
+
+Biling account
+	O project no google cloud tem que estar associado a um billing account, senão não dá para consumir via api.
+
+
+
+
+
+
+
+

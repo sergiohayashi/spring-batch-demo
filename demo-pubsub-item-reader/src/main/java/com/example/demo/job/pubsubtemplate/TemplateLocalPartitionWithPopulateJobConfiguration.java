@@ -25,7 +25,7 @@ import com.example.demo.reader.PubSubTemplateItemReader;
 
 @Configuration
 @EnableBatchProcessing		//para injetar JobBuilderFactory e StepBuilderFactory
-public class TemplateLocalPartitionJobConfiguration {
+public class TemplateLocalPartitionWithPopulateJobConfiguration {
 	
 	
     @Autowired
@@ -37,10 +37,14 @@ public class TemplateLocalPartitionJobConfiguration {
 	@Autowired 
 	public PubSubTemplateItemReader pubsubTemplateItemReader;
 	
+	@Autowired
+	CommonsPubSubStep commonsStep;
+	
     @Bean
-    public Job templateLocalPartitionJob() {
-    	return jobBuilderFactory.get( "template-pubsub-local-partition")
-    			.start( step1())
+    public Job templateLocalPartitionWithPopulateJob() {
+    	return jobBuilderFactory.get( "template-pubsub-local-partition-with-populate")
+    			.start( commonsStep.stepPopulatePubSubWithTestData())	//popula com dados iniciais..
+    			.next( step1())	// faz o que tem que fazer..
     			.build();
     }
 
@@ -74,14 +78,14 @@ public class TemplateLocalPartitionJobConfiguration {
 	private Step stepWorker() {
 		return this.stepBuilderFactory.get( "step-worker")
 			.<String,String>chunk(1)
-			.reader( pubsubTemplateItemReader(null))
+			.reader( pubsubTemplateWithPopulateItemReader(null))
 			.writer( CommonStepBuilder.writer())
 			.build();
 	}
 
 	@Bean
 	@StepScope
-	public ItemReader<String> pubsubTemplateItemReader(
+	public ItemReader<String> pubsubTemplateWithPopulateItemReader(
 		 @Value("#{stepExecutionContext['value']}") Integer value
 			
 		) {
