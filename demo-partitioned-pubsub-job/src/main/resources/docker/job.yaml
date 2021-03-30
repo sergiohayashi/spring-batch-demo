@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  creationTimestamp: null
+  name: pubsub-batchpoc
+spec:
+  template:
+    metadata:
+      creationTimestamp: null
+    spec:
+      containers:
+        - image: pubsub-partitioner
+          name: pubsub-batch
+          resources: {}
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Never
+status: {}
+

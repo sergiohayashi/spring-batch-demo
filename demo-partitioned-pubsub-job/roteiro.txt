@@ -1,0 +1,49 @@
+0. Build do projeto e gerar o .jar
+	mvn clean package -DskipTests
+	
+0.2 Copiar o jar pasta resources/docker
+
+1. subir minikube (ou docker desktop)
+
+1.1 Gerar a imagem do docker
+
+	cd resource/docker
+	docker build -t pubsub-partitioner .
+	
+	ou
+	
+	docker build -t <docker-hub-id>/pubsub-partitioner .
+
+2. subir o mysql no cluster
+	mysql.yml
+		baixar do docker hub
+	pv.yaml
+	pvc.yaml
+	
+	kubectl apply -f pvc.yaml
+	kubectl apply -f pv.yaml 
+	kubectl apply -f mysql.yml 
+	
+
+	Para rodar um pod só para o cliente:
+		kubectl run -it --rm --image=mysql:5.6 --restart=Never mysql-client -- mysql -h mysql -ppassword
+	
+	Para habilitar acesso de fora do cluster:
+		kubectl port-forward svc/mysql 3306:3306
+	
+2.1 conectar o cliente o serviço do mysql
+	drop database pubsub_batch
+	create database batch-pubsub
+
+2.2 rodar os scripts da base
+	(no pubsub nao precisa..)
+	
+3. subir o master (job)
+	kubectl apply -f role.yaml
+	kubectl apply -f role-binding.yaml
+	kubectl apply -f job.yaml
+	
+4. acompanhar e ver que os workers subiram..	
+	kubectl logs <pod-name> --follow
+
+

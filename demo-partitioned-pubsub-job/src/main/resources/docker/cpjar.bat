@@ -1,0 +1,1 @@
+cp ..\..\..\..\target\demo-partitioned-pubsub-job-0.0.1-SNAPSHOT.jar .

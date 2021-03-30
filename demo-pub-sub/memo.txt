@@ -1,0 +1,11 @@
+#https://cloud.google.com/pubsub/docs/spring
+set GOOGLE_APPLICATION_CREDENTIALS="C:\Users\hayashi\.credentials\gcp\spring batch-0450ea31f6c4.json"
+set GOOGLE_CLOUD_PROJECT=spring-batch-1616782042728
+
+
+#https://docs.spring.io/spring-cloud-gcp/docs/1.1.0.M1/reference/html/spring-cloud-gcp-core.html
+#https://docs.oracle.com/javase/7/docs/technotes/guides/jweb/jcp/properties.html
+spring.cloud.gcp.project-id=spring-batch-1616782042728
+spring.cloud.gcp.credentials.location=file:///C:/Users\hayashi/.credentials/gcp/spring batch-0450ea31f6c4.json
+
+
