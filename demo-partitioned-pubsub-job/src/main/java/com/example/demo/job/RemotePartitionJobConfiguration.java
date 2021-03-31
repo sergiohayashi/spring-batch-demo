@@ -37,6 +37,8 @@ import com.example.demo.commons.CommonStepBuilder;
 import com.example.demo.commons.CommonsPubSubStep;
 import com.example.demo.reader.PubSubTemplateItemReader;
 
+//TODO: Trazer nomes de topicos e outras variaveis a partir do properties.
+//	Usar como exemplo o kafka  => https://docs.spring.io/spring-batch/docs/4.3.x/api/org/springframework/batch/item/kafka/KafkaItemReader.html
 @Configuration
 @EnableBatchProcessing		//para injetar JobBuilderFactory e StepBuilderFactory
 public class RemotePartitionJobConfiguration {
@@ -93,7 +95,8 @@ public class RemotePartitionJobConfiguration {
 		Resource resource = this.resourceLoader.getResource(image);
 		DeployerPartitionHandler partitionHandler =  new DeployerPartitionHandler(
 				taskLauncher, jobExplorer, resource, 
-				"workerStep"); //OBS: Aqui tem que ser o nome do rotina do step do worker, e não o nome no get()
+				"workerStep", //<= OBS: Aqui tem que ser o nome do rotina do step do worker, e não o nome no get()
+				taskRepository); 
 		List<String> commandLineArgs = new ArrayList<>(3);
 		commandLineArgs.add("--spring.profiles.active=worker");
 		commandLineArgs.add("--spring.cloud.task.initialize-enabled=false");
@@ -102,7 +105,7 @@ public class RemotePartitionJobConfiguration {
 		partitionHandler.setEnvironmentVariablesProvider(new SimpleEnvironmentVariablesProvider(this.environment));
 		partitionHandler.setMaxWorkers(10);
 		partitionHandler.setGridSize(2);
-		partitionHandler.setApplicationName("pubsub-worker-step");
+		partitionHandler.setApplicationName("PartitionedPubSubJobTask");
 		return partitionHandler;
 
 	}
@@ -160,7 +163,8 @@ public class RemotePartitionJobConfiguration {
 				.build();
 	}	
 
-	//Entry point para o worker..
+	// Entry point para o worker..
+	// veja que não é específico para o step, que vem via parametro...
 	@Bean
 	@Profile("worker")
 	public DeployerStepExecutionHandler stepExecutionHandler(JobExplorer jobExplorer) {

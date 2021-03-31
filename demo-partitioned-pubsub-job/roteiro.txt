@@ -15,7 +15,7 @@
 	
 	docker build -t <docker-hub-id>/pubsub-partitioner .
 
-2. subir o mysql no cluster
+2. subir o mysql no cluster (só a primeira vez)
 	mysql.yml
 		baixar do docker hub
 	pv.yaml
@@ -36,15 +36,22 @@
 	drop database pubsub_batch
 	create database batch-pubsub
 
-2.2 rodar os scripts da base
-	(no pubsub nao precisa..)
+2.2 rodar os scripts da base (no pubsub nao precisa..)
 	
-3. subir o master (job)
+3. subir o master (uma unica vez)
 	kubectl apply -f role.yaml
 	kubectl apply -f role-binding.yaml
+
+3.1 executar o job
 	kubectl apply -f job.yaml
 	
 4. acompanhar e ver que os workers subiram..	
 	kubectl logs <pod-name> --follow
+	
+	
+5. apagar os jobs, se precisar
+	kubectl delete jobs --all
+	
+	
 
 
