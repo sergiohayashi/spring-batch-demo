@@ -25,7 +25,7 @@ spec:
           - name: worker__gridsize
             value: '2'          
           - name: job__name
-            value: 'simpleRemoteJob-19'          
+            value: 'simpleRemoteJob-20'          
           - name: simulate__error__for__steps
             value: '999'                
       restartPolicy: Never

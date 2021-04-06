@@ -158,8 +158,8 @@ public class RemotePartitionJobConfiguration {
 		System.out.println( String.format( "partition value= %d", value));
 		
 		return pubsubTemplateItemReader
-				.projectId("playground--sergio")
-				.subscriptionId("mysub")
+				.projectId("playground--sergio")    //<=Trazer do properties!!
+				.subscriptionId("mysub") //<=Trazer do properties!!
 				.build();
 	}	
 
